@@ -62,24 +62,16 @@ def generate_succeeded_service_response(response):
     request_id = response["ResponseMetadata"]["RequestId"]
     session_id = response["ResponseMetadata"]["HTTPHeaders"].get("x-amzn-sessionid")
     response_data = {k: v for k, v in response.items() if k != "ResponseMetadata"}
-    return ServiceResponse(
-        ServiceResponseStatus.SUCCESS, response_data, None, request_id, session_id
-    )
+    return ServiceResponse(ServiceResponseStatus.SUCCESS, response_data, None, request_id, session_id)
 
 
 def generate_client_error_oidc_service_response(e):
     request_id = e.response["ResponseMetadata"]["RequestId"]
-    error_info = ServiceErrorInfo(
-        e.response["Error"]["Code"], e.response["error_description"]
-    )
-    return ServiceResponse(
-        ServiceResponseStatus.ERROR, None, error_info, request_id, None
-    )
+    error_info = ServiceErrorInfo(e.response["Error"]["Code"], e.response["error_description"])
+    return ServiceResponse(ServiceResponseStatus.ERROR, None, error_info, request_id, None)
 
 
 def generate_client_error_codewhisperer_service_response(e):
     request_id = e.response["ResponseMetadata"]["RequestId"]
     error_info = ServiceErrorInfo(e.response["Error"]["Code"], e.response["message"])
-    return ServiceResponse(
-        ServiceResponseStatus.ERROR, None, error_info, request_id, None
-    )
+    return ServiceResponse(ServiceResponseStatus.ERROR, None, error_info, request_id, None)

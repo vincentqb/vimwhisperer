@@ -8,12 +8,10 @@ from botocore import UNSIGNED
 from botocore.client import Config
 
 from .auth import CodeWhispererSsoAuthManager
-
 from .constants import RTS_PROD_ENDPOINT, RTS_PROD_REGION, SSO_START_URL, TOKEN_CACHE
 
 
-
-def get_token(registration = None):
+def get_token(registration=None):
     manager = CodeWhispererSsoAuthManager()
     registration = registration or manager.register_client().data
     deviceAuth = manager.device_authorization(registration, startUrl=SSO_START_URL)
@@ -21,8 +19,8 @@ def get_token(registration = None):
     print(f"Complete device authorization at {url} to proceed.")
     webbrowser.open(url)
     token = manager.create_token(registration, deviceAuth.data).data
-    token['clientId'] = registration['clientId']
-    token['clientSecret'] = registration['clientSecret']
+    token["clientId"] = registration["clientId"]
+    token["clientSecret"] = registration["clientSecret"]
     return token
 
 
@@ -40,9 +38,7 @@ def refresh_token():
 
 def get_client():
     session = boto3.Session(region_name="us-east-1")
-    session._loader.search_paths.extend(
-        [os.path.dirname(os.path.realpath(__file__)) + "/data"]
-    )
+    session._loader.search_paths.extend([os.path.dirname(os.path.realpath(__file__)) + "/data"])
     client = session.client(
         service_name="amazoncodewhispererservice",
         endpoint_url=RTS_PROD_ENDPOINT,
@@ -56,8 +52,7 @@ def get_client():
             token = get_token()
             json.dump(token, f)
             print(
-                f"Successfully authenticated to {RTS_PROD_ENDPOINT}.  "
-                f"Credentials cached locally at {TOKEN_CACHE}"
+                f"Successfully authenticated to {RTS_PROD_ENDPOINT}.  " f"Credentials cached locally at {TOKEN_CACHE}"
             )
 
     def add_header(request, **kwargs):
@@ -67,7 +62,7 @@ def get_client():
     return client
 
 
-def complete(prompt, language='python'):
+def complete(prompt, language="python"):
     prompt = prompt or "\n".join(sys.stdin.readlines())
 
     def _generate_completions():
@@ -87,5 +82,5 @@ def complete(prompt, language='python'):
 
     response = _generate_completions()
     for c in response.get("completions", []):
-        for line in c["content"].strip('\n').splitlines():
+        for line in c["content"].strip("\n").splitlines():
             yield line

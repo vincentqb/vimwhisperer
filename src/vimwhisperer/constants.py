@@ -1,14 +1,10 @@
 import os
 
-SSO_START_URL = os.environ.get(
-    "VIM_AWS_SSO_START_URL", "https://view.awsapps.com/start"
-)
+SSO_START_URL = os.environ.get("VIM_AWS_SSO_START_URL", "https://view.awsapps.com/start")
 AWS_REGION = os.environ.get("VIM_AWS_SSO_REGION", "us-east-1")
 TOKEN_CACHE = f'{os.path.expanduser("~")}/.vim/.aws-code-whisperer-auth'
 
-INVALID_TOKEN_EXCEPTION_MESSAGE = (
-    "The security token included in the request is expired"
-)
+INVALID_TOKEN_EXCEPTION_MESSAGE = "The security token included in the request is expired"
 RTS_PROD_ENDPOINT = "https://codewhisperer.us-east-1.amazonaws.com/"
 RTS_PROD_REGION = "us-east-1"
 

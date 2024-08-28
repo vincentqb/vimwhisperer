@@ -2,20 +2,21 @@ import time
 
 import boto3
 from botocore.exceptions import ClientError
+
 from ..constants import (
-    CLIENT_REGISTRATION_TYPE,
     CLIENT_NAME,
-    SCOPES,
-    START_URL,
+    CLIENT_REGISTRATION_TYPE,
     DEVICE_GRANT_TYPE,
-    REFRESH_GRANT_TYPE,
-    SSO_OIDC,
     OIDC_BUILDER_ID_ENDPOINT,
     OIDC_BUILDER_ID_REGION,
+    REFRESH_GRANT_TYPE,
+    SCOPES,
+    SSO_OIDC,
+    START_URL,
 )
 from ..utils import (
-    generate_succeeded_service_response,
     generate_client_error_oidc_service_response,
+    generate_succeeded_service_response,
 )
 
 
@@ -58,12 +59,10 @@ class CodeWhispererSsoAuthManager:
 
     def device_authorization(self, client_registration, startUrl=START_URL):
         try:
-            device_authorization_response = (
-                self._oidc_client.start_device_authorization(
-                    clientId=client_registration["clientId"],
-                    clientSecret=client_registration["clientSecret"],
-                    startUrl=startUrl,
-                )
+            device_authorization_response = self._oidc_client.start_device_authorization(
+                clientId=client_registration["clientId"],
+                clientSecret=client_registration["clientSecret"],
+                startUrl=startUrl,
             )
             return generate_succeeded_service_response(device_authorization_response)
         except ClientError as e:

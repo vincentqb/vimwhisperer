@@ -1,6 +1,6 @@
-from . import api
-
 import vim
+
+from . import api
 
 
 def complete():
